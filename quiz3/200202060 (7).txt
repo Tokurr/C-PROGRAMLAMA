@@ -1,0 +1,110 @@
+//Tayyib OKUR
+//200202060
+//quiz3
+
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int kontrol(int *gun,int *ay,int *yil)
+{
+    int bayrak = 1;
+    if(*yil<1920 || *yil>2022)
+    {
+
+        *yil = 2000;
+        bayrak = 0;
+    }
+
+    if(*ay<1 || *ay>12)
+    {
+        *ay = 1;
+        bayrak = 0;
+    }
+
+    if(*gun<1 || *gun>31)
+    {
+        *gun = 1;
+     bayrak = 0;
+    }
+
+    if( (*yil%4==0 && *ay ==2 && *yil%100 != 0) && *gun>29 )
+    {
+
+       *ay = 1;
+        bayrak = 0;
+    }
+
+    else if(*ay==2 && *gun>28 && *yil%4!=0)
+    {
+        *ay = 1;
+        bayrak = 0;
+    }
+
+   if( (*ay == 1 || *ay == 3 || *ay == 5 || *ay == 7 || *ay == 8 || *ay ==10 || *ay == 12) && *gun>31 )
+   {
+       *gun = 1;
+       bayrak = 0;
+   }
+
+    if((*ay == 4 || *ay == 6 ||*ay == 9|| *ay == 11) && *gun>30)
+    {
+        *gun = 1;
+        bayrak = 0;
+    }
+
+    return bayrak;
+
+}
+
+int main()
+{
+    int gun,ay,yil;
+
+    printf("Gun: ");
+    scanf("%d",&gun);
+
+    while(gun<=0)
+    {
+        printf("Lutfen gun degerini pozitif giriniz: ");
+         scanf("%d",&gun);
+
+    }
+
+    printf("ay: ");
+    scanf("%d",&ay);
+
+     while(ay<=0)
+    {
+        printf("Lutfen ay degerini pozitif giriniz: ");
+         scanf("%d",&ay);
+
+    }
+
+    printf("Yil: ");
+    scanf("%d",&yil);
+     while(yil<=0)
+    {
+        printf("Lutfen yil degerini pozitif giriniz: ");
+         scanf("%d",&yil);
+
+    }
+
+   int sonuc = kontrol(&gun,&ay,&yil);
+
+    
+
+    if(sonuc==1)
+    {
+        printf("Gecerli bir tarih girildi girilen tarih = %d:%d:%d",gun,ay,yil);
+    }
+
+    else if(sonuc == 0)
+    {
+
+        printf("duzeltilmis tarih: %d:%d:%d",gun,ay,yil);
+    }
+
+
+    return 0;
+}
