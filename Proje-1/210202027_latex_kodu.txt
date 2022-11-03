@@ -1,0 +1,222 @@
+    \documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\begin{document}
+
+\title{PROGRAMLAMA LABORATUVARI PROJE I\\DOKUWİKİ KOCAELİ ÜNİVERSİTESİ}
+
+\author{
+\IEEEauthorblockN{Tayyib OKUR}
+\IEEEauthorblockA{200202060 \\
+\textit{Kocaeli Üniversitesi Bilgisayar Mühendisliği İÖ}\\
+ultratayyib@gmail.com}
+\and
+\IEEEauthorblockN{Yusuf GÖKSU}
+\IEEEauthorblockA{\textit{210202027} \\
+\textit{Kocaeli Üniversitesi Bilgisayar Mühendisliği İÖ}\\
+goxuyusuf@gmail.com}
+}
+
+\maketitle
+
+\begin{IEEEkeywords}
+Dosyalar, dirent.h, linux, string
+\end{IEEEkeywords}
+
+\section{ÖZET}
+Bu rapor belgesi 2022-2023 Güz dönemi BLM209 programlama laboratuvarı I 1. projeyi açıklamaya yönelik bilgiler içermektedir. Projenin ismi Dokuwiki Kocaeli Üniversitesidir. Programlama Lab. I 1. proje dosyaya yazma, dosya güncelleme ve dosya okuma becerilerini güçlendirmeye yöneliktir. Projenin hedefiyse bir veri tabanı kullanmadan üniversitede bulunan bölümleri ve bölümlerde
+okutulan derslerin içeriklerini gösteren bir uygulama oluşturulması hedeflenmektedir.
+Bu raporda proje tanıtımı, araştırmalar ve yöntemi, tasarım, deneysel sonuçlar, sonuç ve kaynakça kısımları bulunmaktadır. Bunlara ek olarak kodun akış şeması ve yalancı kodu bulunmaktadır.
+
+
+\section{PROJE TANITIM}
+2022-2023 Güz dönemi Programlama Lab. I 1. proje dosyaya yazma, dosya güncelleme ve dosya okuma becerilerini geliştirmeye yöneliktir.
+Bu işlemler de arama, güncelleme ve dosyaya yazma başlıkları altında yapılmaktadır. Bunun dışında menü (arayüz) oluşturulması istenmektedir.
+Projede içi içe klasörlerden oluşan bir üniversite adlı ana klasör bulunmaktadır. Üniversite adlı klasörün altında en az iki klasör vardır 
+ve bunların altında çeşitli uzantıda olan dosyalar bulunmaktadır (.txt, .jpg, .thmx , .docx). Bizden istenen bu etiketler ile çeşitli işlemler
+(yazma,güncelleme) yapmaktır.\newline
+
+
+
+Her bir dersin bir kodu, adı ve içeriği olmalıdır. Tüm dersler bu şablona uygun olmalıdır.
+\begin{center}
+\includegraphics  [width=8cm]{Örnek Şablon.png}
+\end{center}
+
+Örneğin bir ders şablonu Şekil 1’deki programlama.txt şeklinde olmalıdır.
+Arama adı altında kullanıcı, kelime ve etiket araması yapabilmelidir. Eğer aranan kelime bir etiketse etiket olduğu belirtilmelidir. Kelimenin hangi dosyada ve hangi satırda geçtiği belirtilmelidir. Ayrıca arama kısmında yetim etiketler ve istenen etiketler ekrana yazdırılmalıdır. (istenen etiket: dosyası var fakat etiket yok), (yetim etiket: etiket var fakat dosyası yok). Güncelleme kısmında ise etiket ismi değişikliği bütün dosyalarda etkili olmak koşulu ile veya yetim etiket dosyası oluşturma işlemi yapılabilir. Eğer yetim etiketin dosyası oluşturulursa bu etiket yetim etiket listesinden çıkartılmalıdır. Dosyaya yazma kısmında ise output.txt adında yeni bir dosya oluşturarak tüm etiketler, etiketlerin sayısı ve yetim etiketler yazdırılmalıdır. Eğer kullanıcı output.txt 'de değişiklik yaparsa ve tekrardan dosyaya yazma işlemini uygularsa bize güncellenmiş liste olarak tekrardan tüm etiketler, bunların adetleri ve yetim etiketlerin isimleri o dosyaya yazdırılmış olmalıdır.
+
+\section{ARAŞTIRMALAR VE YÖNTEM}
+\subsection{ARAŞTIRMALAR}
+Projeyi ilk okumaya başladığımızda kafamızda birtakım fikirler oluşmaya başladı.
+İsmini bilmediğimiz bir klasörün nasıl açılacağı konusunda bir fikrimiz yoktu ancak internet üzerinde yaptığımız detaylı araştırmalar sonucu C'de bunun en sağlam çözümünün <dirent.h> kütüphanesini kullanmak olduğunu öğrendik. Bu kütüphaneyi ilk defa gördüğümüz için iyice araştırmaya koyulduk ve opendir, readdir ve dirent'in struct yapısını kullanmayı öğrendik. Readdir fonksiyonunun dosyalardaki gibi statik bir şekilde çalıştığını anladık. Dosyalarda statik çalışma nedir diyecek olursak; fonksiyonun statik olması kendi kendisinin kullanıldıktan kaldığı yerden devam etmesidir. Mesela fgets fonksiyonunu bir sefer kullandık, eğer ki fgets fonksiyonu txt dosyamızın 1. satırının tamamını aldığını varsayarsak, eğer bir defa daha çağırırsam fgets fonksiyonunu bu sefer okumaya kaldığı yerden devam edecek ve böylelikle 2. satırdan okumaya devam edecek. Bu böyle böyle sürerek en sonunda EOF' yi görene kadar ya da fgets fonksiyonunun istediğimiz String dizisine NULL döndürdüğünde anlıyoruz ki artık okunacak bir satır kalmamış bir sonraki txt dosyasına geçmeliyiz ya da işimiz eğer ki dosyayla bitmediyse rewind() fonksiyonuyla o daha demin bahsetmiş olduğum statik olarak dosyanın sonuna gelen hayali imlecimiz, artık txt dosyamızın en başını gösterecek yani en başa gelmiş olacak. Rewind() fonksiyonu fseek(dosya-ismi, 0, SEEK-SET) ile aynı mantıkla çalışmakta ancak biz rewind() fonksiyonunu kullanmayı tercih ettik. Dosyaların isimlerine böylece erişim sağlayabildik. (DİPNOT : '-' 'ler alttan '-' olmalı latex izin vermediği için öyle yazdık)
+\subsection{YÖNTEM}
+Yönteme gelecek olursak:
+İlk öncelikle dirent.h kütüphanesini kullanarak Üniversite adlı klasörümün altındaki klasörlerimin isimlerini bir string dizisinde tuttum. Böylece elimde açabileceğim bütün klasör 
+isimlerini elde ettik. Onların içlerini de açarak içlerindeki ".txt" uzantılı dosyaları alarak başka bir stringte tuttuk.
+Daha sonra o txt dosyalarını tek tek açarak içlerindeki etiket formatında olan etiketleri yine bir string dizimde tuttum.
+Bu elde ettiğim etiketleri tekrar etmeyecek bir forma dönüştürdük. Bunları etiket-tekrarsiz adlı stringimize attık. Bir
+arayüz oluşturmak için menü fonksiyonu oluşturduk. Bu fonksiyonu döngüyle switch-case yapısına bağlı bir şekle soktuk.\\
+Eğer kullanıcı '1' tuşuna basarsa dosyaların içeriğini gösteren fonksiyona, txt dosya adlarını alan stringi ve txt dosya
+sayısını yolladık. Bu fonksiyon bize tüm txt dosyalarını ekrana yazdırıyor ve bir seçim istiyor, bu seçime göre seçilen
+dosya açılıyor ve içeriği fgets() ile yeni oluşturduğumuz boş bir string dizimize atarak ondan sonra o string dizimizin
+içeriğini ekrana yazdırıyoruz. Böyle böyle bütün satırları ekrana yazdırıyoruz. Ancak burada bizim yazış tarzımızdan dolayı
+bir sorun ile karşılaştık. Bu sorun eğer ki son satır boşsa fgets() fonksiyonu ile boş satırı oluşturduğumuz string dizimize
+atmıyordu. Atmamasından dolayı bizim string dizimizin içinde en son kalan cümle bir defa daha ekrana yazdırılıyordu. Bunu
+önlemek için her ekrana string dizimizi yazdırdıktan sonra dizimizin içeriğine strcpy ile NULL attık. Memset ile de kolayca
+boşaltılabilirdi ancak biz uğraşmak istemedik. Aklımıza ilk gelen yöntemi yaptık bir sorun ile karşılaşmadığımız için böyle
+bir yol tercihinde bulunduk.\newline \newline
+Eğer kullanıcı '2' tuşuna basar ise ara() fonksiyonu çağrılıyor. Aranan kelimeyi kullanıcıdan aldık. Daha sonra tekrarsız
+etiketlerimizden , etiketlerdeki parantezleri atıp parantezsiz bir şekilde (etiket-isimleri) stringimizde elde ediyoruz.
+Etiket isimleri ile dosya isimlerini karşılaştırarak yetim etiketleri elde ediyoruz. Daha sonra dosyaların isimlerine
+karşılık gelen bir etiket yoksa onu bulup istenen etiketlere atıyoruz. Sonra elde ettiğimiz bütün etiketleri (istenen etiket
+hariç) aranan kelime ile karşılaştırarak aranan kelimenin etiket olup olmadığını ekrana yazdırıyoruz. Dosyalarımızı tek tek
+açıp satır satır okuyup girilen kelimenin geçtiği satır/satırları ve hangi dosyada geçtiyse ekrana yazdırıyoruz. En sonda da
+yetim etiket ve istenen etiketlerin hepsini güncel bir şekilde ekrana yazdırıyoruz.\newline \newline
+'3' tuşuna kullanıcı tarafından menüde basılırsa güncelle adlı fonksiyonumuz devreye giriyor. Yine etiket isimlerini,
+parantezlerini atarak stringimizi elde ediyoruz. yetim etiketleri elde diyoruz. Kullanıcıya yetim etiket dosyası oluşturma
+ve etiket güncelleme seçenekleri sunuluyor.Eğer ki kullanıcı etiket değiştirmek isterse '1' tuşuna basıyor ve değiştirmek
+istediği etiketin adını ve yeni etiketin isminin ne olacağını giriyor. Burada şöyle bir sorun ile karşılaştık. Bu sorun üst
+üste iki defa gets() fonksiyonu kullandığımız için 1. kullandığımız fgets() fonksiyonu kendi kendine ekarte oluyordu ve
+sadece ikinci stringi alıyordu. Sadede gelirsek sadece 2. fgets() fonksiyonu çalışıyordu. Bunu çözmek için Windows'ta
+çalışırken fflush() adlı fonksiyonu kullandık ve sorun çözüldü ancak linux'ta fflush() fonksiyonu çalışmıyordu bu sebepten
+mütevellit fflush() fonksiyonunun kaldırıp onun yerine getchar() fonksiyonunu kullandık. İnternette araştırdığımızda gördük
+ki bu sorunu çözmek için 5 satırlık bir void türünden cleanstdin adlı bir fonksiyon yazmamız gerekiyordu. Yazabilirdik 
+ancak yapmadık onun yerine bir sefer olmak suretiyle getchar() fonksiyonunu kullandık ve sorunumuz hallolmuş oldu.
+Kaldığımız yerden devam edelim eğer ki kullanıcı etiket değiştirmek isterse '1' tuşuna basıyor ve değiştirmek istediği
+etiketin adını ve yeni etiketin isminin ne olacağını giriyor. Biz de bütün etiket listemizle o değiştirilmek istenen
+etiketin adını karşılaştırıyoruz böyle bir etiket var mı diye kontrol ettiriyoruz. Eğer varsa ve kullanıcı tarafından
+girilen kelime bir etiketse, ekrana; kelime etikettir ve şu adlı txt dosyasında şu numaralı satırlarında geçmektedir diye
+ekrana yazdırıyoruz.Etiket değiştirme işlemini başka bir geçici tmp.txt adlı bir dosya oluşturarak orada değişiklik
+işlemlerini yaparak değiştirilmek istenen dosyaya direkt aynısını yapıştırıyoruz. Yetim etiketlerin dosyalarını 
+oluştururken de 200'den başlamak suretiyle ders kodlarını oluşturuyoruz ve onun bir artırılmış halini yani 201'i 
+derskodutut adlı bir txt dosyasına yazıyoruz. Bu txt bize eğer program kapatılıp açılırsa diye en son oluşturulan 
+yetim etiketin ders kodunu tutmamız için bir kova gibi çalışıyor ve biz her seferinde o dosyayı açarak -yani 
+derskodunu tutuğumuz txt'den bahsediyorum- satır satır okuyarak en büyük sayımızı yani en sondaki sayımızı 
+derskodu adlı integer değişkenimize atıyoruz böylelikle elimizde en son güncel olan 200'den sonraki yazdırmak 
+istediğimiz yetim etiketin ders kodunu elde etmiş oluyoruz. Böylelikle ders kodlarının hem en son halini tutmuş 
+oluyoruz hem de programın kapatılması ihtimaline karşılık yaşanabilecek sorunun önüne geçmiş oluyoruz. 
+Tüm bunların akabinde dersin adını etiket formatında yazıyoruz son olarak da bize söylenildiği şekilde 
+"Ders içeriği" kısmını boş bırakıyoruz. Çünkü oluşturduğumuz yetim etiketin ismini bilmiyoruz, 
+her oluşturduğumuz yetim etiketin ders içeriğini boş bırakmak en mantıklısı.\newline \newline
+Kullanıcı eğer '4' rakamını girerse dosyaya-yaz isimli fonksiyonumuz çalışmaktadır. Üniversite adlı ana klasörümüzde
+output.txt adlı dosyamızı read yani okuma modunda açmaya çalışıyoruz çünkü bu dosya önceden var olmuş olabilir, var olmamış
+da olabilir. Bunu yapmamızın sebebi ise pdf'te verilen "Güncel liste" halini yazdırmak istememiz. Eğer ki dosya read modunda
+açılamadıysa bu demek oluyor ki dosya yoktur ve içinde hiçbir şey yazmıyordur. Bu da demek oluyor ki dosyamızı oluşturmamız
+lazım ve "Güncel Liste" yazmamamız lazım. Bu kontrolü yapmasaydık her seferinde "Güncel Liste" yazdıracaktı ve pdf ile
+çelişki içerisinde bulunacaktık. Eğer output.txt dosyası var ise "a" addition yani ekleme modunda açıyoruz ve en son yazılan
+output.txt nin üzerine eklemelerimizi "Güncel Liste" şeklinde yapıyoruz. Output.txt 'yi nasıl oluşturduğumuzu ya da
+girdiğimizi anladık, peki bunun içine ne yazıyoruz? bunun içine elimizdeki bütün etiketlerin ismini ve karşılarına kaç adet
+olduklarını yazıyoruz. Sonra da bunun altına yetim etiketlerin ismini alt alta yazdırıyoruz.
+Eğer ki kullanıcı bu 4 seçenekten farklı bir rakam-sayı ya da bir şey girerse "Hatalı Seçim" yazısı ekrana bastırılıyor.
+
+\section{Akış Şemaları ve tasarım}
+\subsection{Akış şemaları eklerdedir:}
+Genel Akış [1] (genel.pdf)\newline
+İstenen Etiket [2] (istenen.pdf)\newline
+Yetim Etiket [3] (yetim.pdf)
+
+
+\subsection{Tasarım}
+Tasarımımız temelinde menü yatmaktadır.\\
+Bu menüler yukarıda
+belirttiğimiz üzere dallara ayrılmaktadır. İlk başta tüm etiketler sırasıyla ekrana yazdırılır ve 1-Dosyaya yazdır, 2-Ara fonksiyonu, 3-Güncelleme, 4- Dosyaya yaz olmak üzere menümüz oluşmaktadır. 1 tuşuna basar isek ekrana bütün txt dosyaları geliyor sıralı bir halde. Yanındaki sayıyı tuşlayarak o açmak istediğimiz txt açılıyor ve ekrana yazdırılıyor içinde ne var ise.
+2 tuşuna basarsak ara fonksiyonu devreye giriyor ve aramak istediğiniz kelimeyi giriniz diye yazdırılıyor ekrana. Eğer ki girilen kelime etiket ise etiket formatında olmasa dahi kelime etikettir diye ekrana yazdırılıyor ve hangi satır satırlarda geçtiği ekrana bastırılıyor. 3 tuşuna basarsak güncelle fonksiyonumuz 2' ye ayrılıyor ve etiket ismi mi güncellemek istiyorsunuz yoksa yetim etiketin txt dosyasını mı oluşturmak istiyorsunuz diye ekrana yazdırılıyor. 4 e basarsak dosyaya yazma işlemi yani output.txt yoksa oluşuyor varsa üzerine ekleyerek tüm etiketlerin listesi ve yetim etiketler yazdırılıyor.
+
+\begin{center}
+    \includegraphics[width = 8 cm]{Genel.png}
+    (Ubuntu üzerinden programın çalışması)\\
+\end{center}
+
+\section{Deneysel Sonuçlar}
+\begin{center}
+    \includegraphics[width = 8cm]{Arama.png}
+  (Arama fonksiyonumuzda kelime araması) \newline \newline
+    \includegraphics[width = 85mm]{Sonuç.png}
+ 
+ (Aranan kelimenin etiket olma durumu, hangi txt dosyasında hangi satırlarda geçtiği gösterilmiştir.) \\
+ \includegraphics[width = 85 mm]{İstenenveYetim.png}
+ (Arama fonksiyonunda bizden istenilen, yetim ve istenen etiketlerin yazdırılması işlemi)\\
+ 
+\end{center}
+
+\begin{table}[htbp]
+\caption{GEÇERLİ ETİKET TABLOSU}
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\multicolumn{4}{|c|}{\textbf{Etiket Doğruluk Tablosu}} \\
+\cline{1-4} 
+\textbf{1. etiket} & \textbf{\textit{2. etiket olma koşulu}}& \textbf{\textit{1 İçin Örnek}}& \textbf{\textit{2 İçin Örnek}} \\
+\hline
+[[kelime]] & [[kelime1 kelime2]] & [[Tayyib]] &  [[Yusuf Göksu]] \\
+\hline
+\multicolumn{4}{l}{}
+\end{tabular}
+\label{tab1}
+\end{center}
+\end{table}
+
+\begin{figure}[htbp]
+
+\end{figure}
+
+\section{Sonuçlar}
+Bu projemizde C'de dosyaların nasıl açılacağı, nasıl işleneceği
+konusunda önemli bilgiler öğrendik. Geçen sene derslerde gördüğümüz 
+string fonksiyonlarını bu projemizde çokça kullandık bu sebepten
+fonksiyonlara iyice hakim olduk. Türkçe karakterlerin Windows'ta sıkıntı
+yaratmasından ötürü diğer işletim sistemlerine yönelme fikri doğdu. Biz
+hem Ubuntu üzerinden hem de Kali Linux üzerinden kodumuzu çalıştırdık 
+ve güzel sonuçlar aldık. Türkçe karakter sorunumuz tamamen düzeldi.
+Böylelikle Linux işletim sisteminin kurulumunu öğrenmiş olduk. Linux'ta
+temel komutları (cd, gcc, sudo, apt, apt-get, passwd vb.) öğrenmiş olduk.
+Aslında windows terminalinde yani cmd'de sorun olduğunu öğrendik. Bu sorunu çözmek için terminalin dilini değiştirebiliriz ancak değiştirirsek ileride daha fazla hata ile karşılaşmayı göze almamak için başka bir işletim sistemi kullanmak daha sağlıklı geldi. Kullandığımız terminali de değiştirebilirdik örneğin MSYS kullanarak da farklı işletim sistemi kurmadan sorunumuzu halledebilirdik ancak her halükarda linux komutlarını öğrenmek durumunda kalacaktık ve öğrendik.
+
+
+\section*{Geliştirme Ortamı}
+Kodumuzu C üzerinden yazdık.
+İlk başta kodumuzu yazmaya Codeblocks üzerinden başladık ancak Codeblocks'ta dosyaları açarken Türkçe karakter sorunu yaşadığımız için Devc++ 'ye geçiş yaptık. Kodumuzun tamamını orada yazdık lakin bu sefer dosyalarda Türkçe karakterleri yazdırırken cmd 'de sorunla karşılaştık bu sebepten Linux'ta sunum yapmaya karar verdik. Linux işletim sisteminde ise Ubuntu ve Kali Linux'u tercih ettik, ikisinde de sorunsuz çalışmaktadır.(Ancak Winodws'ta dosya dizinlerine erişirken 2 tane ters '/'  kullanıyoruz lakin linux'ta sadece  '/' kullanmak durumundayız.)\newline
+Kullandığımız kütüphaneler:
+\begin{itemize}
+    \item 
+    stdio.h
+    \item
+    stdlib.h
+    \item
+    string.h
+    \item
+    dirent.h
+\end{itemize}
+
+
+
+\section*{KAYNAKÇA}
+
+Dirent.h kullanımı için kullanılan site \cite{b1}. \\
+Dirent.h kullanımı için gerekli dir açma fonksiyonu \cite{b2} \\
+Dirent.h kullanımı için gerekli dir okuma fonksiyonu \cite{b3} \\
+Çeşitli C' de string üzerinde işlem yapmak için kullandığımız fonksiyonların açıklamasını yapan internet sitesi \cite{b4}\\
+Strstr,strcmp,memcpy,strcpy,strncpy,atoi fonksiyonları için \cite{b5}
+
+
+\begin{thebibliography}{00}
+\bibitem{b1} https://man7.org/linux/man-pages/man0/dirent.h.0p.html
+\bibitem{b2} https://pubs.opengroup.org/onlinepubs/009604599/functions/opendir.html
+\bibitem{b3} https://pubs.opengroup.org/onlinepubs/7908799/xsh/readdir.html
+\bibitem{b4} https://www.bilgigunlugum.net/
+\bibitem{b5} Muhammet Y. , Seher Y.(2018) PROGRAMLAMAYI\\ C İLE ÖĞRENİYORUM,
+(7.basım), Ankara, Palme Yayınevi.
+\end{thebibliography}
+\vspace{12pt}
+
+
+\end{document}
